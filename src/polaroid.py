@@ -13,7 +13,10 @@ class Polaroid():
         #subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
 
     def send_image(self, filename):
+        # NOTE: might need to try different command line tools
+        #       (and change the error check below)
         #command = 'ussp-push /dev/rfcomm0 {} file.png'.format(filename)
+        #command = 'bluetooth-sendto --device={} {}'.format(self.addr, filename)
         command = 'blueman-sendto --device={} {}'.format(self.addr, filename)
         print(command)
         sending = subprocess.Popen(command, shell=True,

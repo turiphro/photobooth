@@ -10,6 +10,13 @@ Run the setup script (bt pincode etc):
 
     sudo python setup.py
 
+I've had some problems getting bluetooth transfer to work;
+different people are reporting variations in success with
+different tools. You might need to experiment a bit, pair
+via the various UI's and print some test selfies while
+looking annoyed.
+
+
 Running
 =======
 
