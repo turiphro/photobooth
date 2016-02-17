@@ -1,3 +1,4 @@
 src/settings.txt
 *.swp
 __pycache__
+src/storage
