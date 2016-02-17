@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
+# Simple photo booth software
+# using Polaroid PoGo, webcam (opencv), and input buttons (via MakeyMakey)
+
 import cv2
 import os, sys
 import time, datetime
+
 import polaroid
 
 WEBCAM_DEVICE = 1
 STORAGE_DIR = 'storage'
 
 
+# UI helper functions
 def putText(img, text, location, positive=True):
     font = cv2.FONT_HERSHEY_DUPLEX
     fsize = 2
@@ -29,48 +34,48 @@ def putText(img, text, location, positive=True):
 
 if __name__ == '__main__':
     # open bluetooth connection (keep open)
-    device = polaroid.Polaroid()
+    printer = polaroid.Polaroid()
+    printer.connect()
 
-    # open webcam
+    # open webcam and UI
     cap = cv2.VideoCapture(WEBCAM_DEVICE)
     screen = 'photo_booth'
     cv2.namedWindow(screen, cv2.WND_PROP_FULLSCREEN)
+
+    # show webcam and wait for user input
     while True:
         ret, frame = cap.read()
         img = frame
         cv2.imshow(screen, img)
         keypress = cv2.waitKey(10)
-        print(keypress)
+
         if keypress == 32: # space
-            print("SNAPSHOT")
+            # take snapshot, wait for user input
             img_ui = img.copy()
             putText(img_ui, "PRINT", 'left_button', True)
             putText(img_ui, "RETAKE", 'right_button', False)
             cv2.imshow(screen, img_ui)
             keypress = cv2.waitKey(0)
+
+            # TODO:
+            # - make image smaller 2 photo res (for faster bluetooth sending)
+            # - instagram-like filters?
+
             if keypress == 32: # space
-                print("SAVING AND PRINTING")
+                # save snapshot, send to printer
                 datestr = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-                cv2.imwrite(os.path.join(STORAGE_DIR, datestr, ".png"), img)
+                filename = os.path.join(os.getcwd(), STORAGE_DIR, datestr + ".jpg")
+                cv2.imwrite(filename, img)
                 img_ui = img.copy()
                 putText(img_ui, "PRINTING", 'centre', True)
                 cv2.imshow(screen, img_ui)
                 cv2.waitKey(1)
+                # TODO: send to printer
+                printer.send_image(filename)
+                # TODO: error handling?
                 time.sleep(4)
             continue
+
         if keypress == 27: # ESC
             break
-
-    #   show webcam
-    #   if keypress ' ':
-    #     take picture
-    #     print("OK?")
-    #     if keypress ' ':
-    #       save photo
-    #       send to printer
-    #       upload to instagram / twitter
-    #       show loader (printing time) -> or can get status via bt?
-    
-    # decisions:
-    # - can use cheese, check for photo in dir (but no cancel)
 

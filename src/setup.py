@@ -48,7 +48,7 @@ for line in cmd.stdout:
         for field in data:
             if len(field) == len('XX:XX:XX:XX:XX:XX'):
                 hostDeviceAddress = field
-                
+
 if len(hostDeviceAddress) == 0:
     print "Something went wrong trying to determine the address of you bluetooth adaptor, are you sure it is plugged in and working?"
     sys.exit()
@@ -62,7 +62,7 @@ if not os.path.exists(pathToBluetoothPincodeSettings):
 settingsFilePath = pathToBluetoothPincodeSettings + '/pincodes'
 
 try:
-    with open(settingsFilePath,'a') as file:
+    with open(settingsFilePath, 'a') as file:
         file.write(printerAddress)
         file.write(' 6000\n')
 except IOError:

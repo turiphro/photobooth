@@ -1,11 +1,29 @@
 import bluetooth
+import subprocess
 
 
 class Polaroid():
     def __init__(self):
         self.addr, self.name = find_device('Polaroid')
 
+    def connect(self):
+        pass
+        #command = "sudo rfcomm bind /dev/rfcomm0 {}".format(self.addr)
+        #print(command)
+        #subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
 
+    def send_image(self, filename):
+        #command = 'ussp-push /dev/rfcomm0 {} file.png'.format(filename)
+        command = 'blueman-sendto --device={} {}'.format(self.addr, filename)
+        print(command)
+        sending = subprocess.Popen(command, shell=True,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        output = sending.stdout.read().decode()
+        errors = sending.stderr.read().decode()
+        if 'error' in errors.lower()\
+                or 'on_transfer_started' not in output.lower():
+            raise Exception("Error while sending image over bluetooth: {}".format(errors))
 
 
 def find_device(name, duration=2):
