@@ -58,22 +58,26 @@ if __name__ == '__main__':
             keypress = cv2.waitKey(0)
 
             # TODO:
-            # - make image smaller 2 photo res (for faster bluetooth sending)
+            # - make image smaller 2 printer resolution
             # - instagram-like filters?
+            # - lighting
 
             if keypress == 32: # space
                 # save snapshot, send to printer
                 datestr = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
                 filename = os.path.join(os.getcwd(), STORAGE_DIR, datestr + ".jpg")
                 cv2.imwrite(filename, img)
-                img_ui = img.copy()
-                putText(img_ui, "PRINTING", 'centre', True)
-                cv2.imshow(screen, img_ui)
-                cv2.waitKey(1)
-                # TODO: send to printer
-                printer.send_image(filename)
+
+                # send to printer
+                #printer.send_image(filename)
                 # TODO: error handling?
-                time.sleep(4)
+
+                for i in range(30, 0, -1):
+                    time.sleep(1)
+                    img_ui = img.copy()
+                    putText(img_ui, "PRINTING ({})".format(i), 'centre', True)
+                    cv2.imshow(screen, img_ui)
+                    cv2.waitKey(1)
             continue
 
         if keypress == 27: # ESC
