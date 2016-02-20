@@ -1,4 +1,5 @@
 src/settings.txt
 *.swp
+*.pyc
 __pycache__
 src/storage

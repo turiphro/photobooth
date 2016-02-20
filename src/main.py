@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python5
 # Simple photo booth software
 # using Polaroid PoGo, webcam (opencv), and input buttons (via MakeyMakey)
 
@@ -11,9 +11,11 @@ import polaroid
 WEBCAM_DEVICE = 1
 STORAGE_DIR = 'storage'
 
+# NOTE: printing ratio may be different; may need to crop
 
-# UI helper functions
+
 def putText(img, text, location, positive=True):
+    """UI helper function for adding text to image"""
     font = cv2.FONT_HERSHEY_DUPLEX
     fsize = 2
     colour = (0, 255, 0) if positive else (255, 0, 0)
@@ -46,7 +48,9 @@ if __name__ == '__main__':
     while True:
         ret, frame = cap.read()
         img = frame
-        cv2.imshow(screen, img)
+        img_ui = img.copy()
+        putText(img_ui, "TAKE", 'left_button', True)
+        cv2.imshow(screen, img_ui)
         keypress = cv2.waitKey(10)
 
         if keypress == 32: # space
@@ -57,11 +61,6 @@ if __name__ == '__main__':
             cv2.imshow(screen, img_ui)
             keypress = cv2.waitKey(0)
 
-            # TODO:
-            # - make image smaller 2 printer resolution
-            # - instagram-like filters?
-            # - lighting
-
             if keypress == 32: # space
                 # save snapshot, send to printer
                 datestr = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -69,17 +68,15 @@ if __name__ == '__main__':
                 cv2.imwrite(filename, img)
 
                 # send to printer
-                #printer.send_image(filename)
+                printer.send_image(filename)
                 # TODO: error handling?
 
-                for i in range(30, 0, -1):
+                for i in range(40, 0, -1):
                     time.sleep(1)
                     img_ui = img.copy()
                     putText(img_ui, "PRINTING ({})".format(i), 'centre', True)
                     cv2.imshow(screen, img_ui)
                     cv2.waitKey(1)
-            continue
 
-        if keypress == 27: # ESC
+        if keypress == 27: # ESC: exit
             break
-
