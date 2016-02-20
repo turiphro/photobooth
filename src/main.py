@@ -53,7 +53,7 @@ if __name__ == '__main__':
         cv2.imshow(screen, img_ui)
         keypress = cv2.waitKey(10)
 
-        if keypress == 32: # space
+        if keypress == 32: # space: take photo
             # take snapshot, wait for user input
             img_ui = img.copy()
             putText(img_ui, "PRINT", 'left_button', True)
@@ -61,7 +61,7 @@ if __name__ == '__main__':
             cv2.imshow(screen, img_ui)
             keypress = cv2.waitKey(0)
 
-            if keypress == 32: # space
+            if keypress == 32: # space: print
                 # save snapshot, send to printer
                 datestr = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
                 filename = os.path.join(os.getcwd(), STORAGE_DIR, datestr + ".jpg")
@@ -69,14 +69,16 @@ if __name__ == '__main__':
 
                 # send to printer
                 printer.send_image(filename)
-                # TODO: error handling?
 
-                for i in range(40, 0, -1):
+                # countdown while printing (scientifically proven waiting time)
+                for i in range(48, 0, -1):
                     time.sleep(1)
                     img_ui = img.copy()
                     putText(img_ui, "PRINTING ({})".format(i), 'centre', True)
                     cv2.imshow(screen, img_ui)
                     cv2.waitKey(1)
+            else:
+                continue # retake
 
         if keypress == 27: # ESC: exit
             break

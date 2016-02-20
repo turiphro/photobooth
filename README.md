@@ -1,4 +1,7 @@
-TODO uitleg
+This repository contains scripts for a photobooth.
+It shows webcam output, allows taking photos with
+custom (physical) buttons, and sends the photo
+over bluetooth to a Polaroid PoGo photo-printer.
 
 
 Installation
