@@ -41,6 +41,7 @@ need to experiment with different lights as well to get a clear image.
 
 ![prototype front image](img/photobooth_front.jpg)
 ![prototype back image](img/photobooth_back.jpg)
+![prototype in operation](img/photobooth_action.jpg)
 
 
 Running
